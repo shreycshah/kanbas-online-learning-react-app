@@ -46,11 +46,11 @@ export const initialState: { quizzes: Quiz[] } = {
             "_id": "A101",
             "title": "Propulsion Assignment",
             "course": "RS101",
-            "quizType": "",
-            "assignmentGroup": "",
+            "quizType": "Graded Quiz",
+            "assignmentGroup": "QUIZZES",
             "settings": {
                 "shuffleAnswers": true,
-                "timeLimit": 0,
+                "timeLimit": 20,
                 "multipleAttempts": {
                     "enabled": true,
                     "attemptsAllowed": 0,
@@ -74,7 +74,7 @@ export const initialState: { quizzes: Quiz[] } = {
             },
             "points": "100",
             "desc": "The assignment is available online. Submit a link to the landing page of courses.",
-            "isPublished": true,
+            "isPublished": false,
             "totQuestions": "10 Questions",
             "questions": [],
         },
@@ -102,7 +102,7 @@ export const initialState: { quizzes: Quiz[] } = {
             },
             "dates": {
                 "availableDate": "2024-06-01",
-                "availableTime": "9:00 AM",
+                "availableTime": "12:00 AM",
                 "dueDate": "2024-06-07",
                 "dueTime": "5:00 PM",
                 "untilDate": "2024-06-01",

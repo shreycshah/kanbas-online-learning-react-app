@@ -1,6 +1,11 @@
 import { FaPencilAlt } from 'react-icons/fa'
+import { useParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 export default function QuizDetails() {
+    const { qid } = useParams();
+    const { quizzes } = useSelector((state: any) => state.quizzesReducer);
+    const quiz = quizzes.find((q: any) => q._id === qid);
     return (
         <div className="container mt-4">
             {/* Buttons */}
@@ -14,7 +19,7 @@ export default function QuizDetails() {
 
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3>Q1 - HTML</h3>
+                <h3>{quiz.title}</h3>
             </div>
 
             {/* Details Section */}
@@ -24,39 +29,39 @@ export default function QuizDetails() {
                         <tbody>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Quiz Type</th>
-                                <td className="text-start">Graded Quiz</td>
+                                <td className="text-start">{quiz.quizType}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Points</th>
-                                <td className="text-start">29</td>
+                                <td className="text-start">{quiz.points}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Assignment Group</th>
-                                <td className="text-start">QUIZZES</td>
+                                <td className="text-start">{quiz.assignmentGroup}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Shuffle Answers</th>
-                                <td className="text-start">No</td>
+                                <td className="text-start">{quiz.settings.shuffleAnswers ? "Yes" : "No"}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Time Limit</th>
-                                <td className="text-start">30 Minutes</td>
+                                <td className="text-start">{quiz.settings.timeLimit} Minutes</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Multiple Attempts</th>
-                                <td className="text-start">No</td>
+                                <td className="text-start">{quiz.settings.multipleAttempts.enabled? "Yes" : "No"}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">View Responses</th>
-                                <td className="text-start">Always</td>
+                                <td className="text-start">Yes</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Show Correct Answers</th>
-                                <td className="text-start">Immediately</td>
+                                <td className="text-start">{quiz.settings.showCorrectAnswers.enabled? "Yes" : "No"}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">One Question at a Time</th>
-                                <td className="text-start">Yes</td>
+                                <td className="text-start">{quiz.settings.oneQuestionAtATime? "Yes" : "No"}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Require Respondus LockDown Browser</th>
@@ -68,11 +73,11 @@ export default function QuizDetails() {
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Webcam Required</th>
-                                <td className="text-start">No</td>
+                                <td className="text-start">{quiz.settings.webcamRequired? "Yes" : "No"}</td>
                             </tr>
                             <tr>
                                 <th scope="row" className="text-end pe-3">Lock Questions After Answering</th>
-                                <td className="text-start">No</td>
+                                <td className="text-start">{quiz.settings.lockQuestionsAfterAnswering? "Yes" : "No"}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,10 +98,10 @@ export default function QuizDetails() {
                         </thead>
                         <tbody>
                             <tr>
-                                <td className="text-center align-middle">Sep 21 at 1pm</td>
+                                <td className="text-center align-middle">{quiz.dates.dueDate} at {quiz.dates.dueTime}</td>
                                 <td className="text-center align-middle">Everyone</td>
-                                <td className="text-center align-middle">Sep 21 at 11:40am</td>
-                                <td className="text-center align-middle">Sep 21 at 1pm</td>
+                                <td className="text-center align-middle">{quiz.dates.availableDate} at {quiz.dates.availableTime}</td>
+                                <td className="text-center align-middle">{quiz.dates.untilDate} at {quiz.dates.untilTime}</td>
                             </tr>
                         </tbody>
                         <tfoot className="border-top"> {/* Add top border */}

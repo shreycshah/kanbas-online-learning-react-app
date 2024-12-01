@@ -49,7 +49,7 @@ export default function Quizzes() {
                 <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
                     <div className="wd-title p-3 ps-2 bg-secondary">
                         <BsGripVertical className="me-2 fs-3" />
-                        <b>Quizes</b>
+                        <b>Quizzes</b>
                         <QuizControlButtons />
                         <span className="border border-dark rounded-5 p-1 me-2 float-end">40% of Total</span>
                     </div>
@@ -71,8 +71,9 @@ export default function Quizzes() {
                                     </div>
                                 </div>
                                 <div className="float-end">
-                                    <QuizControlRightButtons />
-                                    <button onClick={() => removeQuiz(quiz._id)}>Delete</button>  {/* Use removeQuiz to dispatch deleteQuiz */}
+                                    <QuizControlRightButtons quizId={quiz._id}
+                                        deleteQuiz={(quizId) => { removeQuiz(quizId) }}
+                                        isPublished = {quiz.isPublished} />
                                 </div>
                             </li>
                         ))}
