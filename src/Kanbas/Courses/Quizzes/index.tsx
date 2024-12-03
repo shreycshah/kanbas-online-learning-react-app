@@ -63,26 +63,22 @@ export default function Quizzes() {
                         <BsGripVertical className="text-muted me-2 fs-5" />
                         <IoRocketOutline style={{ marginRight: 10, color: 'green' }} />
                         <div className="flex-grow-1">
-                            {currentUser && currentUser?.role == "FACULTY" && (
-                                <>
-                                    <a href={`#/Kanbas/Courses/${cid}/Quizzes/Info/${quiz._id}`} style={{ color: 'black' }}>
-                                        <strong>{quiz.title}</strong>
-                                    </a>
-                                </>
-                            )}
-                            {currentUser && currentUser?.role != "FACULTY" && (
-                                <>
+
+                            <>
+                                <a href={`#/Kanbas/Courses/${cid}/Quizzes/Info/${quiz._id}`} style={{ color: 'black' }}>
                                     <strong>{quiz.title}</strong>
-                                </>
-                            )}
+                                </a>
+                            </>
                             <div className="small">
                                 <strong>{quizStatus(quiz.dates)}</strong> | <strong>Due </strong> {quiz.dates.due.slice(0, 16).split("T")[0]} at {quiz.dates.due.slice(0, 16).split("T")[1]} | 100 pts | {quiz.questions.length} Questions
                             </div>
                         </div>
-                        <QuizControlRightButtons quizId={quiz._id}
-                            deleteQuiz={(quizId) => { removeQuiz(quizId) }}
-                            isPublished={quiz.isPublished}
-                            negatePublishStatus={(quizId) => { changePublishStatus(quizId) }} />
+                        {currentUser && currentUser?.role == "FACULTY" && (
+                            <QuizControlRightButtons quizId={quiz._id}
+                                deleteQuiz={(quizId) => { removeQuiz(quizId) }}
+                                isPublished={quiz.isPublished}
+                                negatePublishStatus={(quizId) => { changePublishStatus(quizId) }} />
+                        )}
 
                     </li>
                 ))}
