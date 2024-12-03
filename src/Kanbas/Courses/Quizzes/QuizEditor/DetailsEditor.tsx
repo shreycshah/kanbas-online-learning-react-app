@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaChevronDown, FaTimes } from "react-icons/fa";
 
-export default function DetailsEditor({ details, setDetails }: { details: any, setDetails: any }) {
+export default function DetailsEditor({ details, setDetails, reset }: { details: any, setDetails: any, reset:boolean }) {
     const [selectedAssignTo, setSelectedAssignTo] = useState('Everyone');
-    const [localDetails, setLocalDetails] = useState(details);
+    console.log("updated details: ", details);
 
+    const [localDetails, setLocalDetails] = useState({...details});
     useEffect(() => {
         setDetails(localDetails); // Update parent state whenever localDetails changes
     }, [localDetails]);
-
+    
+    useEffect(()=>{
+        setLocalDetails({...details});
+    },[reset]);
+  
     return (
         <div id="wd-quiz-details-editor" className="container mt-4">
             {/* Quiz Name */}

@@ -4,18 +4,17 @@ import QuestionsEditor from "./QuestionsEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { addQuiz, updateQuiz } from '../reducer';
-// import CancelSaveButtons from "./cancelSaveButtons";
 
 export default function QuizzesEditor() {
   const { cid, qid } = useParams();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const quiz = quizzes.find((q: any) => q._id === qid);
-  console.log("Quiz Found: ", quiz);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [tab, setTab] = useState("details");
-
+  const [detailsUpdated, setDetailsUpdated] = useState(false);
   const [details, setDetails] = useState({
     "title": "Untitled Quiz",
     "course": cid,
@@ -49,8 +48,7 @@ export default function QuizzesEditor() {
 
   useEffect(() => {
     if (quiz) {
-      console.log("Setting details in setDetails: ", quiz);
-      setDetails({
+       setDetails({...details,
         "title": quiz.title,
         "course": cid,
         "description": quiz.description,
@@ -79,12 +77,11 @@ export default function QuizzesEditor() {
         },
         "isPublished": quiz.isPublished,
       });
-      console.log("Details set in setDetails: ", details);
+      setDetailsUpdated(true);
     }
   }, [quiz]);
 
   const handleSave = () => {
-    console.log("Saving Quiz: ", details);
     const quizExists = quizzes && quizzes.find((q: any) => q._id === qid);
     if (!quizExists) {
       const newQuiz = {
@@ -94,7 +91,6 @@ export default function QuizzesEditor() {
       };
       if (cid) {
         dispatch(addQuiz(newQuiz));
-        console.log("Created new quiz: ", newQuiz._id);
       }
     } else {
       const updatedQuiz = {
@@ -135,7 +131,7 @@ export default function QuizzesEditor() {
         </li>
       </ul>
       {tab == "details" ?
-        <DetailsEditor details={details} setDetails={setDetails} /> :
+        <DetailsEditor details={{...details}} setDetails={setDetails} reset={detailsUpdated} /> :
         <QuestionsEditor />}
       <hr className="mt-3" />
       <div className="d-flex justify-content-center align-items-center mt-2">
