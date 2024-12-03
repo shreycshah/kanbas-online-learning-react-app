@@ -3,17 +3,19 @@ import DetailsEditor from "./DetailsEditor";
 import QuestionsEditor from "./QuestionsEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { addQuiz } from '../reducer';
+import { addQuiz, updateQuiz } from '../reducer';
 // import CancelSaveButtons from "./cancelSaveButtons";
 
 export default function QuizzesEditor() {
   const { cid, qid } = useParams();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const quiz = quizzes.find((q: any) => q._id === qid);
+  console.log("Quiz Found: ", quiz);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [tab, setTab] = useState("details");
+
   const [details, setDetails] = useState({
     "title": "Untitled Quiz",
     "course": cid,
@@ -41,13 +43,13 @@ export default function QuizzesEditor() {
       "due": new Date().toISOString(),
       "until": new Date().toISOString(),
     },
-    "points": 100,
     "isPublished": false,
   });
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     if (quiz) {
+      console.log("Setting details in setDetails: ", quiz);
       setDetails({
         "title": quiz.title,
         "course": cid,
@@ -75,27 +77,32 @@ export default function QuizzesEditor() {
           "due": quiz.dates.due,
           "until": quiz.dates.until,
         },
-        "points": quiz.points,
         "isPublished": quiz.isPublished,
       });
+      console.log("Details set in setDetails: ", details);
     }
   }, [quiz]);
 
   const handleSave = () => {
-    console.log(details)
+    console.log("Saving Quiz: ", details);
     const quizExists = quizzes && quizzes.find((q: any) => q._id === qid);
     if(!quizExists){
       const newQuiz = {
-        _id: qid, // Existing ID or a new unique ID
+        _id: qid,
         ...details,
         questions,
       };
       if (cid) {
-        console.log("Frontend qid: ", qid);
         dispatch(addQuiz(newQuiz));
+        console.log("Created new quiz: ", newQuiz._id);
       }
     } else{
-
+      const updatedQuiz = {
+        ...quizExists,
+        ...details,
+        questions,
+      };
+      dispatch(updateQuiz(updatedQuiz));
     }
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };

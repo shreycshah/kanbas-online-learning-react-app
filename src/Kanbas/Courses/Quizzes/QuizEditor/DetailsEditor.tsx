@@ -6,7 +6,6 @@ export default function DetailsEditor({ details, setDetails }: { details: any, s
     const [localDetails, setLocalDetails] = useState(details);
 
     useEffect(() => {
-        console.log("Local Details:", localDetails);
         setDetails(localDetails); // Update parent state whenever localDetails changes
     }, [localDetails]);
 

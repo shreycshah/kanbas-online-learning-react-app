@@ -74,7 +74,6 @@ export default function AssignmentEditor() {
         not_available_until: formatDate(new Date(availableFrom).toISOString()),
         available_until: formatDate(new Date(availableFrom).toISOString()),
       };
-      console.log(updatedAssignment);
       await assignmentsClient.updateAssignment(updatedAssignment);
       dispatch(updateAssignment(updatedAssignment));
     }

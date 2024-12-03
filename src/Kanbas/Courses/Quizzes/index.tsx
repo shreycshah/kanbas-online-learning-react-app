@@ -13,8 +13,7 @@ import { IoRocketOutline } from "react-icons/io5";
 
 export default function Quizzes() {
     const { cid } = useParams();
-    const { quizzes } = useSelector((state: any) => state.quizzesReducer);  // Use 'quizzes' not 'quizes'
-    console.log("Quizzes:", quizzes);
+    const { quizzes } = useSelector((state: any) => state.quizzesReducer); 
     const dispatch = useDispatch();
 
     const fetchQuizes = () => {
@@ -31,6 +30,19 @@ export default function Quizzes() {
     };
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+    function quizStatus(dates: any): string {
+        const availableDate = new Date(dates.available);
+        const untilDate = new Date(dates.until);
+        const currentDate = new Date();
+        if (currentDate < availableDate) {
+            return "Not Available Until " + dates.available.slice(0,16).split("T")[0];
+        } else if (currentDate > availableDate && currentDate < untilDate) {
+            return "Available";
+        } else {
+            return "Closed";
+        }
+    }
 
     // return (
     // <div>
@@ -112,7 +124,7 @@ export default function Quizzes() {
                                 </>
                             )}
                             <div className="small">
-                                <strong>Closed</strong> | <strong>Due </strong> {quiz.dates.due.slice(0, 16).split("T")[0]} at {quiz.dates.due.slice(0, 16).split("T")[1]} | {quiz.points} pts | {quiz.questions.length} Questions
+                                <strong>{quizStatus(quiz.dates)}</strong> | <strong>Due </strong> {quiz.dates.due.slice(0, 16).split("T")[0]} at {quiz.dates.due.slice(0, 16).split("T")[1]} | 100 pts | {quiz.questions.length} Questions
                             </div>
                         </div>
                         <QuizControlRightButtons quizId={quiz._id}
