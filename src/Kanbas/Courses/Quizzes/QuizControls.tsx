@@ -1,6 +1,8 @@
 import { FaPlus } from "react-icons/fa6";
 import { IoEllipsisVertical } from "react-icons/io5";
+import { BsSearch } from 'react-icons/bs';
 import { useParams, useNavigate } from 'react-router-dom'; 
+import { useSelector } from "react-redux";
 
 export default function QuizControls() {
 
@@ -18,19 +20,32 @@ export default function QuizControls() {
         navigate(`/Kanbas/Courses/${cid}/Quizzes/Edit/${newId}`);
     };
 
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+
     return (
-        <div id="wd-modules-controls" className="text-nowrap">
-            <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end">
-                <IoEllipsisVertical />
-            </button>
-            <button
-                id="wd-add-module-btn"
-                className="btn btn-lg btn-danger me-1 float-end"
-                onClick={handleAddQuiz}  
-            >
-                <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                Quiz
-            </button>
+        <div className="d-flex justify-content-between align-items-center mb-2" style={{ width: '100%' }}>
+            {/* Search Bar with Icon */}
+            <div className="input-group" style={{ width: '40%' }}> {/* Adjust width as needed */}
+                <span className="input-group-text">
+                    <BsSearch />
+                </span>
+                <input type="search" className="form-control" placeholder="Search..." />
+            </div>
+
+            {currentUser && currentUser?.role == "FACULTY" && (
+                <div className="buttons d-flex gap-2">
+                    {/* Add Group Button */}
+                    <button className="btn btn-sm btn-secondary d-flex align-items-center">
+                        <FaPlus className="me-2" /> Group
+                    </button>
+
+                    {/* Add Assignment Button */}
+                    <button className="btn btn-sm btn-danger d-flex align-items-center" onClick={handleAddQuiz}>
+                        <FaPlus className="me-2" />Quiz
+                    </button>
+                </div>
+            )}
+
         </div>
     );
 }

@@ -3,25 +3,61 @@ import { FaTrash } from "react-icons/fa";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FcCancel } from "react-icons/fc";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublished }:
     { quizId: string; deleteQuiz: (quizId: string) => void; isPublished: boolean }) {
+    const navigate = useNavigate();
+    const { cid } = useParams();
+    
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggleDropdown = () => {
+        setDropdownOpen((prev) => !prev);
+    };
+
     const handleDelete = () => {
-        const confirmed = window.confirm("Are you sure you want to delete this assignment?");
+        const confirmed = window.confirm("Are you sure you want to delete this quiz?");
         if (confirmed) {
             deleteQuiz(quizId);
         }
     };
+    const handleEdit = () => {
+        navigate(`Edit/${quizId}`); // Navigate to the Edit page
+    };
+
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     return (
         <div className="float-end">
-            {currentUser && currentUser?.role == "FACULTY" && (
-                <>
-                    <FaTrash className="text-danger me-2 mb-1" onClick={handleDelete} />
-                </>
+            {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 mb-1" />}
+            <IoEllipsisVertical className="fs-4 me-2" onClick={toggleDropdown} style={{ cursor: "pointer" }} />
+            {dropdownOpen && (
+                <div
+                    className="dropdown-menu position-absolute"
+                    style={{
+                        top: "100%",
+                        right: "0",
+                        display: "block",
+                        zIndex: 1000,
+                        background: "white",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        padding: "0.5rem",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                >
+                    <button className="dropdown-item">
+                        {isPublished ? "Unpublish" : "Publish"}
+                    </button>
+                    <button className="dropdown-item" onClick={handleEdit}>
+                        Edit
+                    </button>
+                    <button className="dropdown-item" onClick={handleDelete}>
+                        Delete
+                    </button>
+                </div>
             )}
-            {isPublished ? <FcCancel className="text-danger me-2 mb-1" /> : <GreenCheckmark />}
-            <IoEllipsisVertical className="fs-2 me-2" />
         </div>
     );
 }
