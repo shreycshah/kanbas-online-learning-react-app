@@ -1,28 +1,21 @@
 import { FaPlus } from "react-icons/fa6";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";  
-import { useDispatch } from "react-redux";
-import { addQuiz } from "./reducer";  
-import { initialState } from "./reducer";  
+import { useParams, useNavigate } from 'react-router-dom'; 
 
 export default function QuizControls() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate(); 
 
+    const { cid } = useParams();
+    const navigate = useNavigate();
+    
+    function generateUniqueId() {
+        const now = new Date();
+        const datePart = now.toISOString().replace(/[-:.TZ]/g, ''); // Removes dashes, colons, periods, 'T', 'Z'
+        const randomPart = Math.floor(Math.random() * 10000); // Generates a random 6-digit number
+        return `${datePart}${randomPart}`;
+    }
     const handleAddQuiz = () => {
-        const newQuiz = {
-            ...initialState.quizzes[0], 
-            _id: 1, 
-            title: "New Quiz",  
-            points: "0", 
-            totQuestions: "0 Questions", 
-            isPublished: false,  
-            questions: [],  
-        };
-
-        dispatch(addQuiz(newQuiz));
-
-        navigate(`Add/${newQuiz._id}`);
+        const newId = generateUniqueId();
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/Edit/${newId}`);
     };
 
     return (

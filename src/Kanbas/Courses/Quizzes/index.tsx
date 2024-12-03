@@ -66,8 +66,8 @@ export default function Quizzes() {
                                         </Link>
                                         <br />
                                         <span className="text">{quiz.Status}</span> |
-                                        <b>Not available until </b> {quiz.dueDate} at {quiz.dueTime} | <br />
-                                        <b>Due</b> {quiz.dueDate} at {quiz.dueTime} | {quiz.points} pts | {quiz.totQuestions}
+                                        <b>Not Available until </b> {quiz.dates.available.slice(0,16).split("T")[0]} at {quiz.dates.available.slice(0,16).split("T")[1]} | <br />
+                                        <b>Due</b> {quiz.dates.due.slice(0,16).split("T")[0]} at  {quiz.dates.due.slice(0,16).split("T")[1]} | {quiz.points} pts | {quiz.totQuestions} Questions
                                     </div>
                                 </div>
                                 <div className="float-end">

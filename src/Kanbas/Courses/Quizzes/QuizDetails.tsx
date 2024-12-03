@@ -98,10 +98,10 @@ export default function QuizDetails() {
                         </thead>
                         <tbody>
                             <tr>
-                                <td className="text-center align-middle">{quiz.dates.dueDate} at {quiz.dates.dueTime}</td>
+                                <td className="text-center align-middle">{quiz.dates.due.slice(0,16).split("T")[0]} at {quiz.dates.due.slice(0,16).split("T")[1]}</td>
                                 <td className="text-center align-middle">Everyone</td>
-                                <td className="text-center align-middle">{quiz.dates.availableDate} at {quiz.dates.availableTime}</td>
-                                <td className="text-center align-middle">{quiz.dates.untilDate} at {quiz.dates.untilTime}</td>
+                                <td className="text-center align-middle">{quiz.dates.available.slice(0,16).split("T")[0]} at {quiz.dates.available.slice(0,16).split("T")[1]}</td>
+                                <td className="text-center align-middle">{quiz.dates.until.slice(0,16).split("T")[0]} at {quiz.dates.until.slice(0,16).split("T")[1]}</td>
                             </tr>
                         </tbody>
                         <tfoot className="border-top"> {/* Add top border */}

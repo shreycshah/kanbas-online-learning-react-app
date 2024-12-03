@@ -27,6 +27,7 @@ export default function QuestionParentForm() {
       <div className="d-flex justify-content-center align-items-center mt-2">
         <input
           id="wd-question-title"
+          placeholder='Question Title'
           className="form-control me-1 border border-secondary"
         />
         <select
@@ -45,7 +46,7 @@ export default function QuestionParentForm() {
         <input
           id="wd-question-pts"
           className="form-control"
-          value={40}
+          value={0}
           style={{ width: '60px' }}
         />
       </div>

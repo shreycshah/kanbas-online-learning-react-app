@@ -65,7 +65,6 @@ export default function AssignmentEditor() {
         dispatch(addAssignment(assignment));
       }
     } else {
-      // Update the existing assignment
       const updatedAssignment = {
         ...assignmentExists,
         title,
