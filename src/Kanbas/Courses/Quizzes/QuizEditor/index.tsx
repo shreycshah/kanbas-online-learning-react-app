@@ -58,7 +58,7 @@ export default function QuizzesEditor() {
         "assignmentGroup": quiz.assignmentGroup,
         "settings": {
           "shuffleAnswers": quiz.settings.shuffleAnswers,
-          "timeLimit":  quiz.settings.timeLimit,
+          "timeLimit": quiz.settings.timeLimit,
           "multipleAttempts": {
             "enabled": quiz.settings.multipleAttempts.enabled,
             "attemptsAllowed": quiz.settings.multipleAttempts.attemptsAllowed,
@@ -69,7 +69,7 @@ export default function QuizzesEditor() {
           },
           "accessCode": quiz.settings.accessCode,
           "oneQuestionAtATime": quiz.settings.oneQuestionAtATime,
-          "webcamRequired":   quiz.settings.webcamRequired,
+          "webcamRequired": quiz.settings.webcamRequired,
           "lockQuestionsAfterAnswering": quiz.settings.lockQuestionsAfterAnswering,
         },
         "dates": {
@@ -86,7 +86,7 @@ export default function QuizzesEditor() {
   const handleSave = () => {
     console.log("Saving Quiz: ", details);
     const quizExists = quizzes && quizzes.find((q: any) => q._id === qid);
-    if(!quizExists){
+    if (!quizExists) {
       const newQuiz = {
         _id: qid,
         ...details,
@@ -96,7 +96,7 @@ export default function QuizzesEditor() {
         dispatch(addQuiz(newQuiz));
         console.log("Created new quiz: ", newQuiz._id);
       }
-    } else{
+    } else {
       const updatedQuiz = {
         ...quizExists,
         ...details,
@@ -106,6 +106,10 @@ export default function QuizzesEditor() {
     }
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
+
+  const handleCancel = () => {
+    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+  }
 
   return (
     <div>
@@ -139,7 +143,8 @@ export default function QuizzesEditor() {
         <div className="d-flex">
           <button
             id="wd-add-assignment-group"
-            className="text-nowrap btn btn-lg btn-secondary m-3">
+            className="text-nowrap btn btn-lg btn-secondary m-3"
+            onClick={handleCancel}>
             Cancel
           </button>
           <button
