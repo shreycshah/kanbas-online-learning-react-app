@@ -7,11 +7,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublished }:
-    { quizId: string; deleteQuiz: (quizId: string) => void; isPublished: boolean }) {
+export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublished, negatePublishStatus }:
+    { quizId: string; deleteQuiz: (quizId: string) => void; isPublished: boolean; negatePublishStatus: (quizId: string) => void; }) {
     const navigate = useNavigate();
     const { cid } = useParams();
-    
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
@@ -28,10 +28,15 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
         navigate(`Edit/${quizId}`); // Navigate to the Edit page
     };
 
+    const handlePublish = () => {
+        negatePublishStatus(quizId);
+    };
+
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     return (
         <div className="float-end">
-            {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 mb-1" />}
+            {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 position-relative"
+                style={{ fontSize: "1.25rem", top: "2px" }} />}
             <IoEllipsisVertical className="fs-4 me-2" onClick={toggleDropdown} style={{ cursor: "pointer" }} />
             {dropdownOpen && (
                 <div
@@ -48,7 +53,7 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     }}
                 >
-                    <button className="dropdown-item">
+                    <button className="dropdown-item" onClick={handlePublish}>
                         {isPublished ? "Unpublish" : "Publish"}
                     </button>
                     <button className="dropdown-item" onClick={handleEdit}>
