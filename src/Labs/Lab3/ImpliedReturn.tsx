@@ -1,7 +1,7 @@
 const multiply = (a: number, b: number) => a * b;
 export default function ImpliedReturn() {
     const fourTimesFive = multiply(4, 5);
-    console.log(fourTimesFive);
+    (fourTimesFive);
     return (
         <div id="wd-implied-return">
             <h4>Implied return</h4>

@@ -44,8 +44,8 @@ export default function QuizzesEditor() {
     },
     "isPublished": false,
   });
-  const [questions, setQuestions] = useState([]);
-
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [questionsUpdated, setQuestionsUpdated] = useState(false);
   useEffect(() => {
     if (quiz) {
        setDetails({...details,
@@ -77,6 +77,8 @@ export default function QuizzesEditor() {
         },
         "isPublished": quiz.isPublished,
       });
+      setQuestions([...quiz.questions]);
+      setQuestionsUpdated(true)
       setDetailsUpdated(true);
     }
   }, [quiz]);
@@ -89,6 +91,7 @@ export default function QuizzesEditor() {
         ...details,
         questions,
       };
+
       if (cid) {
         dispatch(addQuiz(newQuiz));
       }
@@ -98,7 +101,9 @@ export default function QuizzesEditor() {
         ...details,
         questions,
       };
+      console.log("yayy",questions)
       dispatch(updateQuiz(updatedQuiz));
+
     }
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
@@ -107,6 +112,9 @@ export default function QuizzesEditor() {
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   }
 
+  // useEffect(()=>{
+  //   // ("ALl questios updated: ",questions)
+  // },[questions])
   return (
     <div>
       <h1>Quizzes</h1>
@@ -132,7 +140,7 @@ export default function QuizzesEditor() {
       </ul>
       {tab == "details" ?
         <DetailsEditor details={{...details}} setDetails={setDetails} reset={detailsUpdated} /> :
-        <QuestionsEditor />}
+        <QuestionsEditor questions={[...questions]} setQuestions={setQuestions} reset={questionsUpdated}/>}
       <hr className="mt-3" />
       <div className="d-flex justify-content-center align-items-center mt-2">
         {/* <CancelSaveButtons/> */}

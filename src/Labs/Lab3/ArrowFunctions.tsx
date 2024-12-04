@@ -3,7 +3,7 @@ const subtract = (a: number, b: number) => {
 };
 export default function ArrowFunctions() {
     const threeMinusOne = subtract(3, 1);
-    console.log(threeMinusOne);
+    (threeMinusOne);
     return (
         <div id="wd-arrow-functions">
             <h4>New ES6 arrow functions</h4>

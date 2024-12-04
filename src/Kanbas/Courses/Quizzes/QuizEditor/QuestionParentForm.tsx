@@ -1,24 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MCQEditor from "./MCQEditor";
 import TrueFalseEditor from "./TrueFalseEditor"; // Import TrueFalse component
 import FillInTheBlankEditor from "./FillInTheBlankEditor"; // Import FillInTheBlanks component
 
-export default function QuestionParentForm() {
-  const [selectedType, setSelectedType] = useState<string>('3'); // Default to 'Multiple Choice'
+export default function QuestionParentForm({question, index, updateState, reset}:{question:any, index:number, updateState:any, reset:any}) {
+  const [selectedType, setSelectedType] = useState<string>(''); // Default to 'Multiple Choice'
 
+  const [res, setRes] = useState(reset)
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value); // Update selected question type
   };
 
+  const [title, setTitle] = useState("")
+  const [points, setPoints] = useState("")
+  const [questionText, setQuestionText] = useState("")
+  const [choices, setChoices] = useState<any[]>([])
+  const [answer, setAnswer] = useState(false)
+  const [possibleAnswers, setPossibleAnswers] = useState<any[]>([])
+
+  const updateQuestion = ()=>{
+    console.log("newData: ",{
+      title,
+      points,
+      answer,
+      "question":questionText,
+      choices,
+      possibleAnswers,
+      "type":selectedType
+    })
+    updateState({
+      title,
+      points,
+      answer,
+      "question":questionText,
+      choices,
+      possibleAnswers,
+      "type":selectedType
+    }, index)
+  }
+   useEffect(()=>{
+    console.log("updating details ",question)
+    setSelectedType(question.type)
+    setTitle(question.title)
+    setPoints(question.points)
+    setQuestionText(question.question)
+    setChoices([...question.choices])
+    setAnswer(answer)
+    setPossibleAnswers([...question.possibleAnswers])
+   },[question])
+   
+   useEffect(()=>{
+    setRes(reset)
+   },[reset])
   const renderComponent = () => {
     switch (selectedType) {
-      case '1':
-        return <TrueFalseEditor />;
-      case '2':
-        return <FillInTheBlankEditor />;
-      case '3':
+      case 'tf':
+        return <TrueFalseEditor questionText={questionText} setQuestionText={setQuestionText} answer={answer} setAnswer={setAnswer} reset={res}/>;
+      case 'fib':
+        return <FillInTheBlankEditor questionText={questionText} setQuestionText={setQuestionText} possibleAnswers={possibleAnswers} setPossibleAnswers={setPossibleAnswers} reset={res}/>;
+      case 'mcq':
       default:
-        return <MCQEditor />;
+        return <MCQEditor questionText={questionText} setQuestionText={setQuestionText} choices={choices} setChoices={setChoices} reset={res}/>;
     }
   };
 
@@ -29,6 +71,8 @@ export default function QuestionParentForm() {
           id="wd-question-title"
           placeholder='Question Title'
           className="form-control me-1 border border-secondary"
+          value = {title}
+          onChange={(e)=>{setTitle(e.target.value)}}
         />
         <select
           id="wd-question-group"
@@ -36,9 +80,9 @@ export default function QuestionParentForm() {
           value={selectedType} // Bind the select element to the state
           onChange={handleChange} // Handle the change event
         >
-          <option value="3">Multiple Choice</option>
-          <option value="1">True or False</option>
-          <option value="2">Fill in the Blanks</option>
+          <option value="mcq">Multiple Choice</option>
+          <option value="tf">True or False</option>
+          <option value="fib">Fill in the Blanks</option>
         </select>
         <label htmlFor="wd-question-pts" className="form-label ms-5">
           pts:
@@ -46,12 +90,13 @@ export default function QuestionParentForm() {
         <input
           id="wd-question-pts"
           className="form-control"
-          value={0}
+          value={points}
           style={{ width: '60px' }}
+          onChange={(e)=>{setPoints(e.target.value)}}
         />
       </div>
       <hr />
-      {renderComponent()} {/* Conditionally render the appropriate component */}
+      {renderComponent()} 
       <hr />
       <div className="d-flex">
         <button
@@ -63,7 +108,7 @@ export default function QuestionParentForm() {
         <button
           id="wd-add-assignment-group"
           className="text-nowrap btn btn-danger mt-2 ms-2"
-        >
+          onClick={()=>{updateQuestion()}}        >
           Update Question
         </button>
       </div>

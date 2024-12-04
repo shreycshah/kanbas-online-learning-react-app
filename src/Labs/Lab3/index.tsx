@@ -34,7 +34,7 @@ import PathParameters from "./PathParameters";
 import { useSelector } from "react-redux";
 
 export default function Lab3() {
-  console.log('Hello World!');
+  ('Hello World!');
   const { todos } = useSelector((state: any) => state.todosReducer);
   return (
     <div id="wd-lab3">
