@@ -3,7 +3,7 @@ function add(a: number, b: number) {
 }
 export default function LegacyFunctions() {
     const twoPlusFour = add(2, 4);
-    console.log(twoPlusFour);
+    (twoPlusFour);
     return (
         <div id="wd-legacy-functions">
             <h4>Functions</h4>

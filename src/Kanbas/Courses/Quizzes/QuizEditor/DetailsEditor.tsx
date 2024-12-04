@@ -3,7 +3,6 @@ import { FaCalendarAlt, FaChevronDown, FaTimes } from "react-icons/fa";
 
 export default function DetailsEditor({ details, setDetails, reset }: { details: any, setDetails: any, reset:boolean }) {
     const [selectedAssignTo, setSelectedAssignTo] = useState('Everyone');
-    console.log("updated details: ", details);
 
     const [localDetails, setLocalDetails] = useState({...details});
     useEffect(() => {

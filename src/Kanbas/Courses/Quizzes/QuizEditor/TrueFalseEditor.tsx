@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { LuPencil } from "react-icons/lu";
+import React, { useEffect, useState } from 'react';
 
-export default function TrueFalseEditor() {
-    const [selectedAnswer, setSelectedAnswer] = useState<string>(''); // Track the selected answer
-
+export default function TrueFalseEditor({questionText, setQuestionText, answer, setAnswer,reset}:{questionText:string, setQuestionText:any,answer:boolean, setAnswer:any, reset:any}) {
+    const [selectedAnswer, setSelectedAnswer] = useState<string>(answer?"true":"false"); // Track the selected answer
+    const [localQuestion, setLocalQuestion] = useState(questionText)
+    // console.log("updats questionP:",questionText)
     const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAnswer(e.target.value); // Update the selected answer
+        setAnswer(e.target.value=="true"?true:false)
+
     };
+    useEffect(()=>{
+        setQuestionText(localQuestion)
+        setAnswer(selectedAnswer == "true"?true:false)
+    },[selectedAnswer, localQuestion])
+    
+    useEffect(()=>{
+        setSelectedAnswer(answer?"true":"false")   
+        setLocalQuestion(questionText) 
+    },[reset])
 
     return (
         <div>
@@ -19,6 +29,8 @@ export default function TrueFalseEditor() {
                 id="wd-description"
                 className="form-control border border-dark rounded-1 mt-2"
                 rows={4}
+                value = {localQuestion}
+                onChange={(e)=>{setLocalQuestion(e.target.value)}}
             >
                 {" "}
             </textarea>
