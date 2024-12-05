@@ -94,6 +94,7 @@ export default function QuizzesEditor() {
       };
 
       if (cid) {
+        console.log("newQuiz",newQuiz)
         const quiz = await coursesClient.createQuizForCourse(cid, newQuiz);
         dispatch(addQuiz(quiz));
       }
