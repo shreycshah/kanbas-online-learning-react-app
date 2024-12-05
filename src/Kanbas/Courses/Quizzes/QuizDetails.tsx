@@ -133,7 +133,8 @@ export default function QuizDetails() {
 
             {currentUser && currentUser?.role == "STUDENT" && (
                 <div className="d-flex justify-content-center mt-4">
-                    <button className="btn btn-danger">
+                    <button className="btn btn-danger"
+                        onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Attempt/${quiz._id}`)}>
                         Attempt Quiz
                     </button>
                 </div>

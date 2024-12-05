@@ -5,7 +5,8 @@ import FillInTheBlanks from "./FillInTheBlankAttempt";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-export default function QuizPreview() {
+
+export default function QuizAttempt() {
   const { cid, qid } = useParams();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const quiz = quizzes.find((q: any) => q._id === qid);
@@ -42,6 +43,11 @@ export default function QuizPreview() {
     }
   );
   const [questions, setQuestions] = useState<any[]>([]);
+
+  const handleSubmit = () => {
+    console.log("Quiz Submitted");
+    console.log(questions);
+  }
 
   useEffect(() => {
     if (quiz) {
@@ -168,9 +174,8 @@ export default function QuizPreview() {
         <div className="d-flex mt-4 p-3 border border-dark rounded-1 align-items-center justify-content-end m-3">
           <span className=" me-3">Quiz saved at 8:12</span>
           <button
-            className={`btn btn-lg border border-dark rounded-1 float-right ${active >= questions.length - 1 ? `btn-danger` : `btn-secondary`
-              }`}
-          >
+            className={`btn btn-lg border border-dark rounded-1 float-right ${active >= questions.length - 1 ? `btn-danger` : `btn-secondary`}`}
+            onClick={handleSubmit}>
             Submit Quiz
           </button>
         </div>
