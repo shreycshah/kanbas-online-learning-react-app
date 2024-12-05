@@ -1,7 +1,7 @@
 import QuizControls from "./QuizControls";
 import QuizControlButtons from "./QuizControlButtons";
 import QuizControlRightButtons from "./QuizControlRightButtons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoTriangleDown } from "react-icons/go";
 import { BsGripVertical } from "react-icons/bs";
 import { setQuizzes, deleteQuiz, updateQuiz } from "./reducer";
@@ -15,7 +15,6 @@ export default function Quizzes() {
     const { cid } = useParams();
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const dispatch = useDispatch();
-
     const fetchQuizes = () => {
         dispatch(setQuizzes(quizzes));  // It looks like you're setting quizzes again here, make sure it's required
     };
@@ -37,7 +36,6 @@ export default function Quizzes() {
     };
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-
     function quizStatus(dates: any): string {
         const availableDate = new Date(dates.available);
         const untilDate = new Date(dates.until);
