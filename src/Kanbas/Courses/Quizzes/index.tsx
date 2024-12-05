@@ -19,27 +19,37 @@ export default function Quizzes() {
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const dispatch = useDispatch();
 
-    const fetchQuizes = async () => {
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+    const fetchQuizzes = async () => {
         const quizzes = await coursesClient.findQuizzesForCourse(cid as string);
-        dispatch(setQuizzes(quizzes));  // It looks like you're setting quizzes again here, make sure it's required
+        let filteredQuizzes = quizzes;
+        if (currentUser?.role === "STUDENT") {
+            filteredQuizzes = quizzes.filter((quiz: any) => quiz.isPublished === true);
+            dispatch(setQuizzes(filteredQuizzes));
+        } else {
+            dispatch(setQuizzes(quizzes));
+        }
+
     };
 
     useEffect(() => {
-        fetchQuizes();
+        fetchQuizzes();
     }, [dispatch]);
 
-    // Updated deleteQuiz handler to dispatch correctly
     const removeQuiz = async (quizId: string) => {
         await quizClient.deleteQuiz(quizId);
-        dispatch(deleteQuiz(quizId));  // Make sure to dispatch the action correctly
+        dispatch(deleteQuiz(quizId));
+        await fetchQuizzes();
     };
 
-    const changePublishStatus = (quizId: string) => {
+    const changePublishStatus = async (quizId: string) => {
         const quiz = quizzes.find((q: any) => q._id === quizId);
         const currentStatus = quiz.isPublished;
         const updatedStatusQuiz = { ...quiz, isPublished: !currentStatus };
         quizClient.updateQuiz(updatedStatusQuiz);
         dispatch(updateQuiz(updatedStatusQuiz));
+        await fetchQuizzes();
     };
 
     function quizStatus(dates: any): string {
@@ -57,15 +67,13 @@ export default function Quizzes() {
 
     function calculateTotalPoints(questions: any[]): number {
         return questions.reduce((total, question) => {
-            const points = Number(question.points); // Ensure points are numeric
+            const points = Number(question.points);
             if (isNaN(points)) {
                 throw new Error(`Invalid points value in question: ${question.title}`);
             }
             return total + points;
         }, 0);
     }
-
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     return (
         <div>
