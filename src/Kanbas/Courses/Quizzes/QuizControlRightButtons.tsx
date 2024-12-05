@@ -32,7 +32,6 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
         negatePublishStatus(quizId);
     };
 
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
     return (
         <div className="float-end">
             {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 position-relative"

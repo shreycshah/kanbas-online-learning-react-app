@@ -73,7 +73,7 @@ export default function DetailsEditor({ details, setDetails, reset }: { details:
                         <select id="wd-group" className="form-control"
                             value={localDetails.assignmentGroup || "QUIZZES"}
                             onChange={(e) => {
-                                setLocalDetails((prev: any) => ({ ...prev, quizType: e.target.value }));
+                                setLocalDetails((prev: any) => ({ ...prev, assignmentGroup: e.target.value }));
                             }}>
                             <option value="QUIZZES">QUIZZES</option>
                             <option value="ASSIGNMENTS">ASSIGNMENTS</option>
