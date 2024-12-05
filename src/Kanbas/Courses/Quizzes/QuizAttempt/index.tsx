@@ -3,11 +3,13 @@ import TrueFalse from "./TrueFalseAttempt";
 import MCQ from "./MCQAttempt";
 import FillInTheBlanks from "./FillInTheBlankAttempt";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import * as quizClient from "../client";
 
 export default function QuizAttempt() {
   const { cid, qid } = useParams();
+  const navigate = useNavigate();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const quiz = quizzes.find((q: any) => q._id === qid);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -44,9 +46,27 @@ export default function QuizAttempt() {
   );
   const [questions, setQuestions] = useState<any[]>([]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     console.log("Quiz Submitted");
     console.log(questions);
+    const response = questions.map(question => {
+      return {
+        questionId: question._id,
+        type: question.type,
+        answer: question.answer,
+      };
+    });
+    console.log(response);
+    const quizSubmission = {
+      quiz: qid,
+      course: cid,
+      user : currentUser._id,
+      responses: response,
+      submittedAt : new Date().toISOString().slice(0,16),
+    };
+    quizClient.submitQuizResponse(quizSubmission);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/Info/${qid}`);
+
   }
 
   useEffect(() => {
@@ -82,7 +102,7 @@ export default function QuizAttempt() {
         "isPublished": quiz.isPublished,
       });
       //set answer as empty to record use answer
-      setQuestions([...quiz.questions.map((question: any) => ({ ...question, answer: "" }))]);
+      setQuestions([...quiz.questions.map((question: any) => ({ ...question, enteredAnswer: "" }))]);
     }
   }, [quiz]);
   const [active, setActive] = useState<number>(0);

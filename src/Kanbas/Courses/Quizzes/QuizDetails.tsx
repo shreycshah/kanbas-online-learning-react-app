@@ -4,13 +4,14 @@ import { useSelector } from "react-redux";
 
 export default function QuizDetails() {
     const { cid, qid } = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const quiz = quizzes.find((q: any) => q._id === qid);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+    
     function calculateTotalPoints(questions: any[]): number {
         return questions.reduce((total, question) => {
-            const points = Number(question.points); // Ensure points are numeric
+            const points = Number(question.points);
             if (isNaN(points)) {
                 throw new Error(`Invalid points value in question: ${question.title}`);
             }
