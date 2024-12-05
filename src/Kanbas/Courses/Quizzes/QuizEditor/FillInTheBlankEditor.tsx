@@ -22,9 +22,13 @@ export default function FillInTheBlankEditor({
   // const [correctAnswer, setcorrectAnswer] = useState(-1);
   const [localQuestion, setLocalQuestion] = useState(questionText);
   const addAnswer = () => {
+    // setLocalPossibleAnswers([
+    //   ...localPossibleAnswers,
+    //   { answer: "", isCorrect: false },
+    // ]);
     setLocalPossibleAnswers([
       ...localPossibleAnswers,
-      { answer: "", isCorrect: false },
+      "",
     ]);
   };
   const [isHovered, setIsHovered] = useState<number>(-1);
@@ -49,7 +53,7 @@ export default function FillInTheBlankEditor({
   };
   const updateAnswer = (index: number, answer: string) => {
     const newAnswers = localPossibleAnswers;
-    newAnswers[index].answer = answer;
+    newAnswers[index] = answer;
     setLocalPossibleAnswers([...newAnswers]);
   };
 
@@ -102,7 +106,7 @@ export default function FillInTheBlankEditor({
             <input
               id="wd-question-pts"
               className="form-control"
-              value={answer.answer}
+              value={answer}
               style={{ width: "50%" }}
               onChange={(e) => {
                 isHovered == index && updateAnswer(index, e.target.value);

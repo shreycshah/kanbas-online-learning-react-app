@@ -155,10 +155,10 @@ export default function QuizPreview() {
           </div>
         </div>
         <div className = "col-2"></div>
-        <div className="d-flex mt-4 p-3 border border-dark rounded-1 align-items-center justify-content-end">
-          <span className="justify-content-end me-3">Quiz saved at 8:12</span>
+        <div className="d-flex mt-4 p-3 border border-dark rounded-1 align-items-center justify-content-end m-3">
+          <span className=" me-3">Quiz saved at 8:12</span>
           <button
-            className={`btn btn-lg border border-dark rounded-1 justify-content-end ${
+            className={`btn btn-lg border border-dark rounded-1 float-right ${
               active >= questions.length - 1 ? `btn-danger` : `btn-secondary`
             }`}
           >
