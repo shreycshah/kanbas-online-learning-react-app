@@ -1,17 +1,18 @@
 import { FaPencilAlt } from 'react-icons/fa'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 export default function QuizDetails() {
-    const { qid } = useParams();
+    const { cid,qid } = useParams();
+    const navigate = useNavigate()
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const quiz = quizzes.find((q: any) => q._id === qid);
     return (
         <div className="container mt-4">
             {/* Buttons */}
             <div className="d-flex justify-content-center mb-3">
-                <button className="btn btn-secondary me-2">Preview</button>
-                <button className="btn btn-secondary me-2">
+                <button className="btn btn-secondary me-2" onClick={()=>navigate("/Kanbas/Courses/"+cid+"/Quizzes/Preview/"+quiz._id)}>Preview</button>
+                <button className="btn btn-secondary me-2" onClick={()=>navigate("/Kanbas/Courses/"+cid+"/Quizzes/Edit/"+quiz._id)}>
                     <FaPencilAlt className="me-2" /> Edit {/* Pencil icon with label */}
                 </button>
             </div>
