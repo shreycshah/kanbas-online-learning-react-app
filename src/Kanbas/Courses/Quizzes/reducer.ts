@@ -8,6 +8,7 @@ interface Quiz {
     course: string;
     quizType: string;
     points: string;
+    description: string;
     assignmentGroup: string;
     settings: {
         shuffleAnswers: boolean;
@@ -31,9 +32,7 @@ interface Quiz {
         until: string;
     };
     isPublished: boolean;
-    questions: Array<{ q_id: string; [key: string]: any }>;
-    description: string;
-    totQuestions: string;
+    questions: Array<{ _id: string; [key: string]: any }>;
 }
 
 // Define your initial state

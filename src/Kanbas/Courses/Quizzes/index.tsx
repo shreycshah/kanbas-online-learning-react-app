@@ -10,12 +10,17 @@ import AssignmentControlButtons from "../Assignments/AssignmentControlButtons";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { IoRocketOutline } from "react-icons/io5";
+import * as quizClient from "./client";
+import * as coursesClient from "../client";
+
 
 export default function Quizzes() {
     const { cid } = useParams();
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const dispatch = useDispatch();
-    const fetchQuizes = () => {
+
+    const fetchQuizes = async() => {
+        const quizzes = await coursesClient.findQuizzesForCourse(cid as string); 
         dispatch(setQuizzes(quizzes));  // It looks like you're setting quizzes again here, make sure it's required
     };
 
@@ -24,7 +29,8 @@ export default function Quizzes() {
     }, [dispatch]);
 
     // Updated deleteQuiz handler to dispatch correctly
-    const removeQuiz = (quizId: string) => {
+    const removeQuiz = async (quizId: string) => {
+        await quizClient.deleteQuiz(quizId);
         dispatch(deleteQuiz(quizId));  // Make sure to dispatch the action correctly
     };
 

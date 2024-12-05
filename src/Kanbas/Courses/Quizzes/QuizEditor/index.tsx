@@ -4,12 +4,13 @@ import QuestionsEditor from "./QuestionsEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { addQuiz, updateQuiz } from '../reducer';
+import * as coursesClient from "../../client";
+import * as quizClient from "../client";
 
 export default function QuizzesEditor() {
   const { cid, qid } = useParams();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const quiz = quizzes.find((q: any) => q._id === qid);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -83,7 +84,7 @@ export default function QuizzesEditor() {
     }
   }, [quiz]);
 
-  const handleSave = () => {
+  const handleSave = async() => {
     const quizExists = quizzes && quizzes.find((q: any) => q._id === qid);
     if (!quizExists) {
       const newQuiz = {
@@ -93,7 +94,8 @@ export default function QuizzesEditor() {
       };
 
       if (cid) {
-        dispatch(addQuiz(newQuiz));
+        const quiz = await coursesClient.createQuizForCourse(cid, newQuiz);
+        dispatch(addQuiz(quiz));
       }
     } else {
       const updatedQuiz = {
@@ -102,6 +104,7 @@ export default function QuizzesEditor() {
         questions,
       };
       console.log("yayy",questions)
+      quizClient.updateQuiz(updatedQuiz);
       dispatch(updateQuiz(updatedQuiz));
 
     }
