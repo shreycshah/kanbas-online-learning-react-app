@@ -23,7 +23,7 @@ export default function QuizDetails() {
             {currentUser && currentUser?.role == "FACULTY" && (
                 <>
                     <div className="d-flex justify-content-center mb-3">
-                        <button className="btn btn-secondary me-2" onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Preview/${quiz._id}`)}>Preview</button>
+                        <button className="btn btn-secondary me-2" onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Attempt/${quiz._id}`)}>Preview</button>
                         <button className="btn btn-secondary me-2" onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Edit/${quiz._id}`)}>
                             <FaPencilAlt className="me-2" /> Edit {/* Pencil icon with label */}
                         </button>
