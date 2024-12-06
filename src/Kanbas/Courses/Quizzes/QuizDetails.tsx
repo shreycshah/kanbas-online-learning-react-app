@@ -12,12 +12,23 @@ export default function QuizDetails() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     const [attempts, setAttempts] = useState<any[]>([]);
+    const [latestAttempt, setLatestAttempt] = useState<any | null>(null);
 
     const fetchAttempts = async () => {
         if (currentUser.role == "STUDENT") {
             const fetchedAttempts = await quizClient.findAttemptsForQuizByUser(qid, currentUser._id);
-            console.log(fetchedAttempts);
-            setAttempts(fetchedAttempts); // Update the state with fetched data
+            setAttempts(fetchedAttempts);
+
+            if (fetchedAttempts.length > 0) {
+                // Reduce fetched attempts to find the latest one
+                const latest = fetchedAttempts.reduce((prev: any, current: any) => {
+                    return (new Date(current.submittedAt) > new Date(prev.submittedAt)) ? current : prev;
+                }, fetchedAttempts[0]); // Initialize with the first attempt
+
+                setLatestAttempt(latest); // Update the state with the latest attempt
+            } else {
+                setLatestAttempt(null); // Clear the latest attempt if no attempts are found
+            }
         }
     };
 
@@ -175,14 +186,10 @@ export default function QuizDetails() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {attempts.map((attempt, index) => (
-                                        <tr key={index}>
-                                            <td className="text-center align-middle">
-                                                {attempt.submittedAt.split("T")[0]} at {attempt.submittedAt.split("T")[1]}
-                                            </td>
-                                            <td className="text-center align-middle">{attempt.score}</td>
-                                        </tr>
-                                    ))}
+                                    <td className="text-center align-middle">
+                                        {latestAttempt?.submittedAt.split("T")[0]} at {latestAttempt?.submittedAt.split("T")[1]}
+                                    </td>
+                                    <td className="text-center align-middle">{latestAttempt?.score}</td>
                                 </tbody>
                                 <tfoot className="border-top"> {/* Add top border */}
                                     <tr>
