@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { enroll, unenroll } from "./enrollmentsReducer";
@@ -15,13 +15,14 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
   const [showAllCourses, setShowAllCourses] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const isEnrolled = (courseId: any) => courses.find(
     (course: any) => course._id === courseId
   );
 
   const [coursesToDisplay, setCoursesToDisplay] = useState<any[]>([]);
-  
+
   useEffect(() => {
     setCoursesToDisplay(showAllCourses ? allCourses : courses);
   }, [courses, showAllCourses]);
@@ -32,11 +33,11 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
     await fetchAllCourses();
   };
   const enrollStudent = async (course: any) => {
-    await userClient.enrollIntoCourse(currentUser._id,course._id);
+    await userClient.enrollIntoCourse(currentUser._id, course._id);
     await fetchCourses();
     await fetchAllCourses();
   };
-    
+
 
   return (
     <div id="wd-dashboard">
@@ -76,19 +77,17 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
               <div className="wd-dashboard-course col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">
                   <div>
-                    <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                      className="wd-dashboard-course-link text-decoration-none text-dark" >
-                      <img src={course.image} width="100%" height={160} />
-                    </Link>
+                    <img src={course.image} width="100%" height={160} />
                     <div className="card-body">
-                      <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                        className="wd-dashboard-course-link text-decoration-none text-dark" >
-                        <h5 className="wd-dashboard-course-title card-title">
-                          {course.name} </h5>
-                        <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
-                          {course.description} </p>
-                        <button className="btn btn-primary"> Go </button>
-                      </Link>
+                      <h5 className="wd-dashboard-course-title card-title">
+                        {course.name} </h5>
+                      <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
+                        {course.description} </p>
+                      {isEnrolled(course._id) && (
+                        <>
+                          <button className="btn btn-primary" onClick={() => navigate(`/Kanbas/Courses/${course._id}/Home`)}> Go </button>
+                        </>
+                      )}
                       {currentUser?.role === "FACULTY" && (
                         <>
                           <button onClick={(event) => {
