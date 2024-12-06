@@ -25,7 +25,7 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
     };
     const handleEdit = () => {
         console.log("Edit quiz: ", quizId);
-        navigate(`Edit/${quizId}`); // Navigate to the Edit page
+        navigate(`Info/${quizId}`); // Navigate to the Edit page
     };
 
     const handlePublish = () => {
