@@ -103,6 +103,7 @@ export default function QuizzesEditor() {
       const updatedQuiz = {
         ...quizExists,
         ...details,
+        isPublished: false,
         questions,
       };
       console.log("yayy",questions)
