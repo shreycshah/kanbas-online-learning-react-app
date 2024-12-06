@@ -16,3 +16,11 @@ export const submitQuizResponse = async (quizSubmission: any) => {
     );
     return response.data;
 };
+
+export const findAttemptsForQuizByUser = async (quizId: any, userId: string) => {
+    const response = await axios.post(
+        `${QUIZZES_API}/attempt`,
+        { "quizId": quizId, "userId": userId }
+    );
+    return response.data;
+}

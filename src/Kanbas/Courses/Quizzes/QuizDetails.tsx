@@ -1,6 +1,8 @@
 import { FaPencilAlt } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
+import * as quizClient from "./client";
+import React, { useState, useEffect } from 'react';
 
 export default function QuizDetails() {
     const { cid, qid } = useParams();
@@ -8,7 +10,23 @@ export default function QuizDetails() {
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const quiz = quizzes.find((q: any) => q._id === qid);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    
+
+    const [attempts, setAttempts] = useState<any[]>([]);
+
+    const fetchAttempts = async () => {
+        if (currentUser.role == "STUDENT") {
+            const fetchedAttempts = await quizClient.findAttemptsForQuizByUser(qid, currentUser._id);
+            console.log(fetchedAttempts);
+            setAttempts(fetchedAttempts); // Update the state with fetched data
+        }
+    };
+
+    useEffect(() => {
+        if (qid && currentUser._id) { // Ensure IDs are available
+            fetchAttempts();
+        }
+    }, [qid, currentUser._id]);
+
     function calculateTotalPoints(questions: any[]): number {
         return questions.reduce((total, question) => {
             const points = Number(question.points);
@@ -18,6 +36,20 @@ export default function QuizDetails() {
             return total + points;
         }, 0);
     }
+
+    function isQuizAvailable(dates: any): boolean {
+        const availableDate = new Date(dates.available);
+        const untilDate = new Date(dates.until);
+        const currentDate = new Date();
+        if (currentDate < availableDate) {
+            return false;
+        } else if (currentDate > availableDate && currentDate < untilDate) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return (
         <div className="container mt-4">
             {/* Buttons */}
@@ -131,14 +163,51 @@ export default function QuizDetails() {
                     </table>
                 </div>
             </div>
-
             {currentUser && currentUser?.role == "STUDENT" && (
-                <div className="d-flex justify-content-center mt-4">
-                    <button className="btn btn-danger"
-                        onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Attempt/${quiz._id}`)}>
-                        Attempt Quiz
-                    </button>
-                </div>
+                <>
+                    <div className="row">
+                        <div className="col-md-8 mx-auto"> {/* Center align the table */}
+                            <table className="table table-borderless table-sm"> {/* Reduced spacing */}
+                                <thead className="border-bottom"> {/* Add bottom border */}
+                                    <tr>
+                                        <th className="text-center align-middle">Submitted On</th>
+                                        <th className="text-center align-middle">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {attempts.map((attempt, index) => (
+                                        <tr key={index}>
+                                            <td className="text-center align-middle">
+                                                {attempt.submittedAt.split("T")[0]} at {attempt.submittedAt.split("T")[1]}
+                                            </td>
+                                            <td className="text-center align-middle">{attempt.score}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                <tfoot className="border-top"> {/* Add top border */}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    {((attempts.length === 0 && isQuizAvailable(quiz.dates)) ||
+                        (quiz.settings.multipleAttempts.enabled
+                            && attempts.length < quiz.settings.multipleAttempts.attemptsAllowed
+                            && isQuizAvailable(quiz.dates)))
+                        && (
+                            <div className="d-flex justify-content-center mt-4">
+                                <button className="btn btn-danger"
+                                    onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/Attempt/${quiz._id}`)}>
+                                    Attempt Quiz
+                                </button>
+                            </div>
+                        )
+                    }
+                </>
             )}
 
         </div >
