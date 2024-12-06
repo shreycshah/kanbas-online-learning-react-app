@@ -9,3 +9,18 @@ export const updateQuiz = async (quiz: any) => {
     const { data } = await axios.put(`${QUIZZES_API}/${quiz._id}`, quiz);
     return data;
 };
+export const submitQuizResponse = async (quizSubmission: any) => {
+    const response = await axios.post(
+        `${QUIZZES_API}/submission`,
+        quizSubmission
+    );
+    return response.data;
+};
+
+export const findAttemptsForQuizByUser = async (quizId: any, userId: string) => {
+    const response = await axios.post(
+        `${QUIZZES_API}/attempt`,
+        { "quizId": quizId, "userId": userId }
+    );
+    return response.data;
+}

@@ -9,7 +9,8 @@ import { Route, Routes, useParams, useLocation } from "react-router";
 import Quizzes from "./Quizzes";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizDetails from "./Quizzes/QuizDetails";
-import QuizPreview from "./Quizzes/QuizPreview";
+import QuizAttempt from "./Quizzes/QuizAttempt";
+
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
@@ -32,7 +33,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/Edit/:qid" element={<QuizEditor />} />
             <Route path="Quizzes/Info/:qid" element={<QuizDetails />} />
-            <Route path="Quizzes/Preview/:qid" element={<QuizPreview />} />
+            <Route path="Quizzes/Attempt/:qid" element={<QuizAttempt />} />
             <Route path="People" element={<PeopleTable />} />
           </Routes>
         </div></div>
