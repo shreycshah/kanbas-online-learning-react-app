@@ -73,7 +73,7 @@ export default function QuizAttempt() {
     if (quiz) {
       setDetails({
         ...details,
-        "title": quiz.title,
+        "title": quiz?.title,
         "course": cid,
         "description": quiz.description,
         "quizType": quiz.quizType,
@@ -129,7 +129,7 @@ export default function QuizAttempt() {
       )}
 
       <h3>Question Instructions</h3>
-      <p>{quiz.description}</p>
+      <p>{quiz?.description}</p>
       <hr />
 
       <div className="row">
