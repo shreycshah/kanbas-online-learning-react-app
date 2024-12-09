@@ -1,6 +1,7 @@
 import axios from "axios";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
+const axiosWithCredentials = axios.create({ withCredentials: true });
 export const deleteQuiz = async (quizId: string) => {
     const response = await axios.delete(`${QUIZZES_API}/${quizId}`);
     return response.data;
@@ -30,3 +31,7 @@ export const getQuizAttemptsForUserForCourse = async (courseId: any, userId: str
     );
     return response.data;
 };
+export const getQuizById = async (quizId:String)=>{
+    const response  = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}`)
+    return response.data
+}
