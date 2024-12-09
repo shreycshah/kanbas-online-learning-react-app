@@ -7,7 +7,7 @@ import { BsGripVertical } from "react-icons/bs";
 import { setQuizzes, deleteQuiz, updateQuiz } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import AssignmentControlButtons from "../Assignments/AssignmentControlButtons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IoRocketOutline } from "react-icons/io5";
 import * as quizClient from "./client";
@@ -75,6 +75,24 @@ export default function Quizzes() {
         }, 0);
     }
 
+    const [latestQuizAttemptsByCourse, setLatestQuizAttemptsByCourse] = useState<any[]>([]);
+    const fetchLatestQuizAttemptsByCourse = async () => {
+        if (currentUser.role == "STUDENT") {
+            const latestAttempts = await quizClient.getQuizAttemptsForUserForCourse(cid, currentUser._id);
+            setLatestQuizAttemptsByCourse(latestAttempts);
+            console.log("All Attemps: ", latestQuizAttemptsByCourse);
+        }
+    };
+
+    useEffect(() => {
+        fetchLatestQuizAttemptsByCourse();
+    }, [cid, currentUser._id]);
+
+    const getQuizScoreById = (quizId: string) => {
+        const attempt = latestQuizAttemptsByCourse.find(attempt => attempt.quiz === quizId);
+        return attempt ? `| Score: ${attempt.score}` : ""; 
+    };
+
     return (
         <div>
             <QuizControls />
@@ -91,7 +109,7 @@ export default function Quizzes() {
                                 <strong>{quiz.title}</strong>
                             </a>
                             <div className="small">
-                                <strong>{quizStatus(quiz.dates)}</strong> | <strong>Due </strong> {quiz.dates.due.slice(0, 16).split("T")[0]} at {quiz.dates.due.slice(0, 16).split("T")[1]} | {calculateTotalPoints(quiz.questions)} pts | {quiz.questions.length} Questions
+                                <strong>{quizStatus(quiz.dates)}</strong> | <strong>Due </strong> {quiz.dates.due.slice(0, 16).split("T")[0]} at {quiz.dates.due.slice(0, 16).split("T")[1]} | {calculateTotalPoints(quiz.questions)} pts | {quiz.questions.length} Questions {getQuizScoreById(quiz._id)}
                             </div>
                         </div>
                         {currentUser && currentUser?.role == "FACULTY" && (

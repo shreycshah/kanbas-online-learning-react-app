@@ -25,7 +25,7 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
     };
     const handleEdit = () => {
         console.log("Edit quiz: ", quizId);
-        navigate(`Edit/${quizId}`); // Navigate to the Edit page
+        navigate(`Info/${quizId}`); // Navigate to the Edit page
     };
 
     const handlePublish = () => {
@@ -34,7 +34,7 @@ export default function QuizControlRightButtons({ quizId, deleteQuiz, isPublishe
 
     return (
         <div className="float-end">
-            {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 position-relative"
+            {isPublished ? <GreenCheckmark /> : <FcCancel className="text-danger me-2 position-relative" onClick={handlePublish}
                 style={{ fontSize: "1.25rem", top: "2px" }} />}
             <IoEllipsisVertical className="fs-4 me-2" onClick={toggleDropdown} style={{ cursor: "pointer" }} />
             {dropdownOpen && (

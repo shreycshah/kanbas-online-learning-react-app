@@ -97,19 +97,20 @@ export default function QuizzesEditor() {
         console.log("newQuiz",newQuiz)
         const quiz = await coursesClient.createQuizForCourse(cid, newQuiz);
         dispatch(addQuiz(quiz));
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/Info/${newQuiz._id}`);
       }
     } else {
       const updatedQuiz = {
         ...quizExists,
         ...details,
+        isPublished: false,
         questions,
       };
       console.log("yayy",questions)
       quizClient.updateQuiz(updatedQuiz);
       dispatch(updateQuiz(updatedQuiz));
-
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/Info/${updatedQuiz._id}`);
     }
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
   const handleCancel = () => {

@@ -9,9 +9,45 @@ import * as quizClient from "../client";
 
 export default function QuizAttempt() {
   const { cid, qid } = useParams();
+  const [quiz, setQuiz] = useState<any>({
+    title: "Untitled Quiz",
+    course: cid,
+    description: "",
+    quizType: "Graded Quiz",
+    assignmentGroup: "QUIZZES",
+    questions:[],
+    settings: {
+      shuffleAnswers: true,
+      timeLimit: 20,
+      multipleAttempts: {
+        enabled: false,
+        attemptsAllowed: 1,
+      },
+      showCorrectAnswers: {
+        enabled: true,
+        timing: "",
+      },
+      accessCode: "",
+      oneQuestionAtATime: true,
+      webcamRequired: false,
+      lockQuestionsAfterAnswering: false,
+    },
+    dates: {
+      available: new Date().toISOString(),
+      due: new Date().toISOString(),
+      until: new Date().toISOString(),
+    },
+    isPublished: false,
+  });
+  const fetchQuiz = async () => {
+    if (qid) {
+      const Quiz = await quizClient.getQuizById(qid);
+      setQuiz({...Quiz});
+    }
+  };
   const navigate = useNavigate();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
-  const quiz = quizzes.find((q: any) => q._id === qid);
+  // const quiz = quizzes.find((q: any) => q._id === qid);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [details, setDetails] = useState(
     {
@@ -68,12 +104,15 @@ export default function QuizAttempt() {
     navigate(`/Kanbas/Courses/${cid}/Quizzes/Info/${qid}`);
 
   }
+  useEffect(()=>{
+    fetchQuiz()
+  },[qid, ])
 
   useEffect(() => {
     if (quiz) {
       setDetails({
         ...details,
-        "title": quiz.title,
+        "title": quiz?.title,
         "course": cid,
         "description": quiz.description,
         "quizType": quiz.quizType,
@@ -129,7 +168,7 @@ export default function QuizAttempt() {
       )}
 
       <h3>Question Instructions</h3>
-      <p>{quiz.description}</p>
+      <p>{quiz?.description}</p>
       <hr />
 
       <div className="row">
